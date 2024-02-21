@@ -1,3 +1,4 @@
+from pathlib import Path
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -54,6 +55,14 @@ def scrape_offices(driver):
 
 
 def save_to_csv(offices_data, filename):
+
+    if not filename.lower().endswith('.csv'):
+        raise ValueError("Invalid file format. Please provide a valid CSV file.")
+
+    parent_directory = Path(filename).parent
+    if not parent_directory.exists():
+        raise FileNotFoundError(f"Directory '{parent_directory}' does not exist.")
+
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file, delimiter=';')
         writer.writerow(['Country', 'CompanyName', 'FullAddress'])
